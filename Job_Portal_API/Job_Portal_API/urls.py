@@ -1,8 +1,8 @@
 
-from django.urls import path
-# from account.views import UserRegistrationView,UserLoginView
+from django.contrib import admin
+from django.urls import path, include
 
 urlpatterns = [
-    path('register/', admin.as_view(), name='register'),
-    # path('login/', UserLoginView.as_view(), name='login'),
-    ]
+    path('admin/', admin.site.urls),
+    path('api/user/', include('account.urls'))
+]

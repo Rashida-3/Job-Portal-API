@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import User
 
 
 # custome user manager
@@ -75,5 +76,22 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+class PersonalInfo(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    first_name=models.CharField(max_length=250)
+    last_name=models.CharField(max_length=255)
+    category=(
+        ('Male','male'),
+        ('Female','female'),
+        ('other','other'),
+    )
+    gender=models.CharField(max_length=200,choices=category)
+    date_of_birth=models.DateField()
+    location=models.CharField(max_length=100)
+    phone_no=models.CharField(max_length=10)
 
+    def __str__(self):
+        return self.first_name
+
+    
 
