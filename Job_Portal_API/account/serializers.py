@@ -1,8 +1,8 @@
 # from django.shortcuts import render
 from rest_framework import serializers
 from account.models import User
-# from rest_framework.views import APIView
-# from account.serializers import UserRegistrationSerializer
+from .models import PersonalInfo
+from django.db import models
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -31,4 +31,11 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model= User
         fields= ['email','password'] 
+
+
+class PersonalInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=PersonalInfo
+        fields=['user','first_name','last_name','gender','date_of_birth','location','phone_no']
+
     
