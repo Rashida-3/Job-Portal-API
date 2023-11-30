@@ -2,13 +2,12 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer,PersonalInfoSerializer
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer,PersonalInfoSerializer, EducationalInfoSerializer, ExperienceInfoSerializer, SkillsInfoSerializer
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import PersonalInfo
-
-
+from .models import PersonalInfo,EducationalInfo,ExperienceInfo,skillsInfo
+from rest_framework.permissions import IsAuthenticated
 
 
 
@@ -22,6 +21,7 @@ def get_tokens_for_user(user):
     }
 
 # # Create your views here.
+# Registration and Login 
 
 class UserRegistrationView(APIView):
     renderer_classes=[UserRenderer]
@@ -60,36 +60,117 @@ class PersonalInfoView(APIView):
         serializer=PersonalInfoSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user= serializer.save()
-            token=get_tokens_for_user(user)
-            return Response({'token':token,'msg': 'Personal Information added Successfully'},
+            return Response({'msg': 'Personal Information added Successfully'},
             status=status.HTTP_201_CREATED)
         print(serializer.errors)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    
-class PersonalInfoUpdated(APIView):
-    renderer_classes=[UserRenderer]  
-    # personalInfo_updated=[Isauthenticated]  
-    def put(self,request,pk,format=None):
-        renderer_classes=[UserRenderer]
 
-        id=pk
-        stu= PersonalInfo.objects.get(pk=id)
-        serializer= PersonalInfoSerializer(stu, data=request.data)
+    def put(self, request, id, format=None):
+        user=PersonalInfo.objects.get(user=id)
+        serializer= PersonalInfoSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'msg':'Personal Information Complete Data Updated Successfully'})
-        return Response(serializer.errors, status=status.
-        HTTP_400_BAD_REQUEST)
+            return Response({'msg':'Update Successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
     
-    def delete(self,request,pk,format=None):
-        renderer_classes=[UserRenderer]
-
-        id=pk
-        stu= PersonalInfo.objects.get(pk=id)
-        stu.delete()
+    def delete(self,request,id,format=None):
+        user= PersonalInfo.objects.filter(user=id)
+        user.delete()
         return Response({'msg':'Data Deleted'})
+    
+
+  # Educational Information
+
+class EducationalInfoView(APIView):
+    renderer_classes=[UserRenderer]
+    def post(self,request,formate=None):
+        serializer=EducationalInfoSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user= serializer.save()
+            return Response({'msg': 'Educational Information added Successfully'},
+            status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request,id,formate=None):
+        user=EducationalInfo.objects.get(user=id)
+        serializer= EducationalInfoSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Educational Information Update Successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+    
+    def delete(self,request,id,format=None):
+        user= EducationalInfo.objects.filter(user=id)
+        user.delete()
+        return Response({'msg':'Data Deleted Successfully'})
+    
+
+      # Experience Information
+
+class ExperienceInfoView(APIView):
+    renderer_classes=[UserRenderer]
+    def post(self,request,formate=None):
+        serializer=ExperienceInfoSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user= serializer.save()
+            return Response({'msg': 'Experience Information added Successfully'},
+            status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def put(self, request,id,formate=None):
+        user=ExperienceInfo.objects.get(user=id)
+        serializer= ExperienceInfoSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Experience Information Update Successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+    
+    def delete(self,request,id,format=None):
+        user= ExperienceInfo.objects.filter(user=id)
+        user.delete()
+        return Response({'msg':'Data Deleted Successfully'})
+    
+    # Skills information
+
+class SkillsInfoView(APIView):
+    renderer_classes=[UserRenderer]
+    def post(self,request,formate=None):
+        serializer=SkillsInfoSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            user= serializer.save()
+            return Response({'msg': 'Skills Information added Successfully'},
+            status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def put(self, request,id,formate=None):
+        user=skillsInfo.objects.get(user=id)
+        serializer= SkillsInfoSerializer(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'msg':'Experience Information Update Successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+  
+    
+    def delete(self,request,id,format=None):
+        user= skillsInfo.objects.filter(user=id)
+        user.delete()
+        return Response({'msg':'Data Deleted Successfully'})
+
+    
+
+
 
 
 

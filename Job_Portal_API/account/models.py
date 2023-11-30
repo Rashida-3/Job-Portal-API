@@ -70,6 +70,7 @@ class User(AbstractBaseUser):
         # simplest possible answer: All admins are staff
         return self.is_admin
 
+# Personal Information model
 class PersonalInfo(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     first_name=models.CharField(max_length=250)
@@ -86,6 +87,66 @@ class PersonalInfo(models.Model):
 
     def __str__(self):
         return self.first_name
+    
+# Educational Information model
+class EducationalInfo(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    Institution=models.CharField(max_length=250)
+    degree=models.CharField(max_length=255)
+    field_of_study=models.CharField(max_length=50)
+    start_year=models.IntegerField()
+    end_year=models.IntegerField()
+    grade=models.IntegerField()
+
+
+    def __str__(self):
+        return self.grade
+    
+
+    # User Experience model
+
+class ExperienceInfo(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    company=models.CharField(max_length=255)
+    role=models.CharField(max_length=100)
+    # location=models.CharField(max_length=100)
+    year_of_experience=models.FloatField()
+    current_ctc=models.FloatField()
+
+    def __str__(self):
+        return self.role
+
+# Skills Model
+
+class skillsInfo(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    name=models.CharField(max_length=100)
+    description=models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+    
+
+# Profile information
+
+class ProfileInfo(models.Model):
+    user=models.OneToOneField(User, on_delete=models.CASCADE)
+    image=models.ImageField(default='default-avtar1.png', upload_to='media/',null=True, blank=True)
+
+    def __str__(self):
+        return self.user
+    
+    
+    
+
+
+
+
+
+    
+
+
+
 
     
 
