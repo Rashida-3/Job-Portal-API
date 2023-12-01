@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 
 # custome user manager
@@ -131,11 +132,18 @@ class skillsInfo(models.Model):
 
 class ProfileInfo(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE)
-    image=models.ImageField(default='default-avtar1.png', upload_to='media/',null=True, blank=True)
+    image=models.ImageField(default='image/avtar1.png', upload_to='image')
+
+    def created_profile(sender, instance, created, **kwargs):
+        if created:
+            ProfileInfo.objects.create(user=instance)
+            print('Profile Created')   
+    post_save.connect(created_profile, sender=User)        
+
 
     def __str__(self):
-        return self.user
-    
+        return str(self.user)
+
     
     
 

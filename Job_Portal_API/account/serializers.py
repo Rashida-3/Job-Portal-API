@@ -1,7 +1,7 @@
 # from django.shortcuts import render
 from rest_framework import serializers
 from account.models import User
-from .models import PersonalInfo, EducationalInfo,ExperienceInfo,skillsInfo
+from .models import PersonalInfo, EducationalInfo,ExperienceInfo,skillsInfo,ProfileInfo
 from django.db import models
 
 
@@ -35,7 +35,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
 class PersonalInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model=PersonalInfo
+        # model=PersonalInfo
         fields=['user','first_name','last_name','gender','date_of_birth','location','phone_no']
 
 # Educational Information
@@ -43,7 +43,7 @@ class PersonalInfoSerializer(serializers.ModelSerializer):
 class EducationalInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        model=EducationalInfo  
+        # model=EducationalInfo  
         fields=['user','Institution','degree','field_of_study','start_year','end_year','grade']
 
         
@@ -52,7 +52,7 @@ class EducationalInfoSerializer(serializers.ModelSerializer):
 class ExperienceInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        model=ExperienceInfo
+        # model=ExperienceInfo
         fields=['user','company','role','year_of_experience','current_ctc']
 
 # Skills Information
@@ -60,7 +60,16 @@ class ExperienceInfoSerializer(serializers.ModelSerializer):
 class SkillsInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
-        model=skillsInfo
+        # model=skillsInfo
         fields=['user','name','description']        
+
+# Profile informaion
+
+class profileInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        # model=ProfileInfo
+        fields='__all__'
+
 
     

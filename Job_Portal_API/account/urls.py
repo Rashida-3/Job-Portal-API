@@ -1,6 +1,8 @@
 
 from django.urls import path, include
-from account.views import UserRegistrationView,UserLoginView ,PersonalInfoView,EducationalInfoView,ExperienceInfoView, SkillsInfoView
+from django.conf.urls.static import static
+from django.conf import settings
+from account.views import UserRegistrationView,UserLoginView ,PersonalInfoView,EducationalInfoView,ExperienceInfoView, SkillsInfoView,UserProfileView
 
 urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name='register'),
@@ -13,11 +15,7 @@ urlpatterns = [
     path('Experience_Info/<int:id>', ExperienceInfoView.as_view(), name='Experience_Info'),
     path('Skills_Info/', SkillsInfoView.as_view(), name='Skills_Info'),
     path('Skills_Info/<int:id>', SkillsInfoView.as_view(), name='Skills_Info'),
-
-
-
-
-
-
+    path('User_Profile/', UserProfileView.as_view(), name='User_Profile'),
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)[0]
 
 ]

@@ -2,13 +2,14 @@
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from account.serializers import UserRegistrationSerializer, UserLoginSerializer,PersonalInfoSerializer, EducationalInfoSerializer, ExperienceInfoSerializer, SkillsInfoSerializer
+from account.serializers import UserRegistrationSerializer, UserLoginSerializer,PersonalInfoSerializer, EducationalInfoSerializer, ExperienceInfoSerializer, SkillsInfoSerializer,profileInfoSerializer
 from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
-from .models import PersonalInfo,EducationalInfo,ExperienceInfo,skillsInfo
+from .models import PersonalInfo,EducationalInfo,ExperienceInfo,skillsInfo,ProfileInfo
 from rest_framework.permissions import IsAuthenticated
-
+from django.core.signals import request_finished
+from django.shortcuts import get_object_or_404
 
 
 # # generate token manually
@@ -167,6 +168,62 @@ class SkillsInfoView(APIView):
         user= skillsInfo.objects.filter(user=id)
         user.delete()
         return Response({'msg':'Data Deleted Successfully'})
+    
+
+class UserProfileView(APIView):
+    renderer_classes=[UserRenderer]
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request, format=None):
+        user=request.user
+
+        
+        profile=ProfileInfo.objects.get(user=user)
+        print('DEBUG......',profile,user.id)
+        print('DEBUG......',PersonalInfo.objects.get(user=user))
+        personal_info=PersonalInfo.objects.get(user=user)
+
+        education_info=EducationalInfo.objects.get(user=user.id)
+        experience=ExperienceInfo.objects.get(user=user.id)
+        skills=skillsInfo.objects.get(user=user)
+        print('DEBUG ----------- .',skills)
+
+
+        profile_serializer=profileInfoSerializer(profile)
+        personal_serializer=PersonalInfoSerializer(personal_info)
+        education_serialize=EducationalInfoSerializer(education_info)
+        experience_serializer=ExperienceInfoSerializer(experience)
+        skills_serializer=SkillsInfoSerializer(skills)
+
+        response_data={
+            'profile':profile_serializer.data,
+            'personal_info':personal_serializer.data,
+            'education_info':education_serialize.data,
+            'experience':experience_serializer.data,
+            'skills':skills_serializer.data
+        }
+        
+        return Response(response_data, status=status.HTTP_200_OK)
+        
+        # except (ProfileInfo.DoesNotExist, PersonalInfo.DoesNotExist, EducationalInfo.DoesNotExist,ExperienceInfo.DoesNotExist,skillsInfo.DoesNotExist):
+        #     return Response({'massage': 'User Profile Does not Exit'}, status=status.HTTP_404_NOT_FOUND)
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 

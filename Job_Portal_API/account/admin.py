@@ -1,7 +1,7 @@
 from django.contrib import admin
 from account.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import PersonalInfo
+from .models import *
 
 class UserModelAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -31,3 +31,11 @@ class UserModelAdmin(BaseUserAdmin):
     filter_horizontal = []
 
 admin.site.register(User, UserModelAdmin)
+admin.site.register(ProfileInfo)
+admin.site.register(PersonalInfo)
+admin.site.register(EducationalInfo)
+admin.site.register(skillsInfo)
+admin.site.register(ExperienceInfo)
+
+
+
