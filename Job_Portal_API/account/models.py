@@ -132,29 +132,31 @@ class skillsInfo(models.Model):
 
 class ProfileInfo(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE)
-    image=models.ImageField(default='image/avtar1.png', upload_to='image')
-
-    def created_profile(sender, instance, created, **kwargs):
-        if created:
-            ProfileInfo.objects.create(user=instance)
-            print('Profile Created')   
-    post_save.connect(created_profile, sender=User)        
-
+    image=models.ImageField(default='media/image/avtar1.png', upload_to='media/image')
 
     def __str__(self):
         return str(self.user)
 
-    
-    
+def created_profile(sender, instance, created, **kwargs):
+    if created:
+        ProfileInfo.objects.create(user=instance)
+        print('Profile Created')   
+post_save.connect(created_profile, sender=User)        
 
 
 
 
 
-    
 
 
 
 
-    
+
+
+
+
+
+
+
+
 

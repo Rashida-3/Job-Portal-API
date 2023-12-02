@@ -26,7 +26,7 @@ def get_tokens_for_user(user):
 
 class UserRegistrationView(APIView):
     renderer_classes=[UserRenderer]
-    def get(self, request, format=None):
+    def post(self, request, format=None):
         serializer=UserRegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user= serializer.save()
@@ -58,9 +58,10 @@ class UserLoginView(APIView):
 class PersonalInfoView(APIView):
     renderer_classes=[UserRenderer]
     def post(self, request, format=None):
+        user = request.user
         serializer=PersonalInfoSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            user= serializer.save()
+            user= serializer.save(user=user)
             return Response({'msg': 'Personal Information added Successfully'},
             status=status.HTTP_201_CREATED)
         print(serializer.errors)
@@ -88,6 +89,9 @@ class PersonalInfoView(APIView):
 class EducationalInfoView(APIView):
     renderer_classes=[UserRenderer]
     def post(self,request,formate=None):
+        user = request.user
+        if EducationalInfo.objects.filter(user=user).exists():
+            return Response({'error': 'Eduction already exists'}, status=status.HTTP_400_BAD_REQUEST)
         serializer=EducationalInfoSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user= serializer.save()
@@ -117,6 +121,9 @@ class EducationalInfoView(APIView):
 class ExperienceInfoView(APIView):
     renderer_classes=[UserRenderer]
     def post(self,request,formate=None):
+        user = request.user
+        if ExperienceInfo.objects.filter(user=user).exists():
+            return Response({'error': 'Experience already exists'}, status=status.HTTP_400_BAD_REQUEST)
         serializer=ExperienceInfoSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user= serializer.save()
@@ -160,7 +167,7 @@ class SkillsInfoView(APIView):
         serializer= SkillsInfoSerializer(user, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({'msg':'Experience Information Update Successfully'}, status=status.HTTP_200_OK)
+            return Response({'msg':'Skills Information Update Successfully'}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
   
     
@@ -176,37 +183,37 @@ class UserProfileView(APIView):
 
     def get(self, request, format=None):
         user=request.user
-
         
-        profile=ProfileInfo.objects.get(user=user)
-        print('DEBUG......',profile,user.id)
-        print('DEBUG......',PersonalInfo.objects.get(user=user))
-        personal_info=PersonalInfo.objects.get(user=user)
+        try: 
+            profile=ProfileInfo.objects.get(user=user)
+            print('DEBUG......',profile,user.id)
+            print('DEBUG......',PersonalInfo.objects.get(user=user))
+            personal_info=PersonalInfo.objects.get(user=user)
 
-        education_info=EducationalInfo.objects.get(user=user.id)
-        experience=ExperienceInfo.objects.get(user=user.id)
-        skills=skillsInfo.objects.get(user=user)
-        print('DEBUG ----------- .',skills)
+            education_info=EducationalInfo.objects.get(user=user.id)
+            experience=ExperienceInfo.objects.get(user=user.id)
+            skills=skillsInfo.objects.get(user=user)
+            print('DEBUG ----------- .',skills)
 
 
-        profile_serializer=profileInfoSerializer(profile)
-        personal_serializer=PersonalInfoSerializer(personal_info)
-        education_serialize=EducationalInfoSerializer(education_info)
-        experience_serializer=ExperienceInfoSerializer(experience)
-        skills_serializer=SkillsInfoSerializer(skills)
+            profile_serializer=profileInfoSerializer(profile)
+            personal_serializer=PersonalInfoSerializer(personal_info)
+            education_serialize=EducationalInfoSerializer(education_info)
+            experience_serializer=ExperienceInfoSerializer(experience)
+            skills_serializer=SkillsInfoSerializer(skills)
 
-        response_data={
-            'profile':profile_serializer.data,
-            'personal_info':personal_serializer.data,
-            'education_info':education_serialize.data,
-            'experience':experience_serializer.data,
-            'skills':skills_serializer.data
-        }
+            response_data={
+                'profile':profile_serializer.data,
+                'personal_info':personal_serializer.data,
+                'education_info':education_serialize.data,
+                'experience':experience_serializer.data,
+                'skills':skills_serializer.data
+            }
+            
+            return Response(response_data, status=status.HTTP_200_OK)
         
-        return Response(response_data, status=status.HTTP_200_OK)
-        
-        # except (ProfileInfo.DoesNotExist, PersonalInfo.DoesNotExist, EducationalInfo.DoesNotExist,ExperienceInfo.DoesNotExist,skillsInfo.DoesNotExist):
-        #     return Response({'massage': 'User Profile Does not Exit'}, status=status.HTTP_404_NOT_FOUND)
+        except (ProfileInfo.DoesNotExist, PersonalInfo.DoesNotExist, EducationalInfo.DoesNotExist,ExperienceInfo.DoesNotExist,skillsInfo.DoesNotExist):
+            return Response({'massage': 'User Profile Does not Exit'}, status=status.HTTP_404_NOT_FOUND)
 
         
 

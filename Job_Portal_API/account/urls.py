@@ -10,12 +10,12 @@ urlpatterns = [
     path('personal_info/', PersonalInfoView.as_view(), name='personal_info'),
     path('personal_info/<int:id>', PersonalInfoView.as_view(), name='personal_info'),
     path('educational_info/', EducationalInfoView.as_view(), name='educational_info'),
-    path('Educational_Info/<int:id>', EducationalInfoView.as_view(), name='Educational_Info'),
-    path('Experience_Info/', ExperienceInfoView.as_view(), name='Experience_Info'),
-    path('Experience_Info/<int:id>', ExperienceInfoView.as_view(), name='Experience_Info'),
-    path('Skills_Info/', SkillsInfoView.as_view(), name='Skills_Info'),
-    path('Skills_Info/<int:id>', SkillsInfoView.as_view(), name='Skills_Info'),
-    path('User_Profile/', UserProfileView.as_view(), name='User_Profile'),
+    path('educational_info/<int:id>', EducationalInfoView.as_view(), name='Educational_Info'),
+    path('experience_info/', ExperienceInfoView.as_view(), name='Experience_Info'),
+    path('experience_info/<int:id>', ExperienceInfoView.as_view(), name='Experience_Info'),
+    path('skills_info/', SkillsInfoView.as_view(), name='Skills_Info'),
+    path('skills_info/<int:id>', SkillsInfoView.as_view(), name='Skills_Info'),
+    path('user_profile/', UserProfileView.as_view(), name='User_Profile'),
     static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)[0]
 
 ]
