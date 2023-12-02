@@ -186,14 +186,12 @@ class UserProfileView(APIView):
         
         try: 
             profile=ProfileInfo.objects.get(user=user)
-            print('DEBUG......',profile,user.id)
-            print('DEBUG......',PersonalInfo.objects.get(user=user))
             personal_info=PersonalInfo.objects.get(user=user)
 
             education_info=EducationalInfo.objects.get(user=user.id)
             experience=ExperienceInfo.objects.get(user=user.id)
             skills=skillsInfo.objects.get(user=user)
-            print('DEBUG ----------- .',skills)
+            # print('DEBUG ----------- .',skills)
 
 
             profile_serializer=profileInfoSerializer(profile)

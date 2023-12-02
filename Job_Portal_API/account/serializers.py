@@ -42,7 +42,6 @@ class EducationalInfoSerializer(serializers.ModelSerializer):
 
     
     class Meta:
-        # model=User
         model=EducationalInfo  
         fields='__all__'
 
@@ -51,7 +50,6 @@ class EducationalInfoSerializer(serializers.ModelSerializer):
 
 class ExperienceInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        # model=User
         model=ExperienceInfo
         fields=['user','company','role','year_of_experience','current_ctc']
 
